@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แผนที่ทรัพย์บังคับคดี | LED Asset Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css?v=8">
+  <link rel="stylesheet" href="css/map.css?v=1">
+</head>
+<body class="map-page">
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">L</span>
+        <span>LED Asset Finder<small>ทรัพย์บังคับคดี</small></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav">เมนู</button>
+      <nav id="mainNav" class="main-nav" aria-label="เมนูหลัก">
+        <a href="index.html"><i>▦</i>ทรัพย์</a>
+        <a href="map.html" class="active"><i>◫</i>แผนที่</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap map-wrap">
+    <h1 class="map-title">แผนที่ทรัพย์บังคับคดี</h1>
+    <p class="map-sub" id="mapNotice">กำลังโหลดข้อมูล…</p>
+
+    <form class="map-bar" id="mapForm" role="search">
+      <input id="q" type="search" placeholder="ค้นหาตำบล อำเภอ หรือจังหวัด" aria-label="ค้นหาทำเล">
+      <select id="fProvince" aria-label="จังหวัด"><option value="">ทุกจังหวัด</option></select>
+      <select id="fType" aria-label="ประเภท">
+        <option value="">ทุกประเภท</option><option value="land">ที่ดินว่างเปล่า</option><option value="house">ที่ดินพร้อมสิ่งปลูกสร้าง</option><option value="condo">คอนโด</option>
+      </select>
+      <select id="fBudget" aria-label="งบ (ราคาประเมิน)">
+        <option value="">ทุกงบ</option><option value="300000">≤ 3 แสน</option><option value="500000">≤ 5 แสน</option><option value="1000000">≤ 1 ล้าน</option><option value="3000000">≤ 3 ล้าน</option><option value="10000000">≤ 10 ล้าน</option>
+      </select>
+      <select id="fWhen" aria-label="วันนัดขาย">
+        <option value="">ทุกวันนัด</option><option value="upcoming">ยังไม่ถึงนัด</option><option value="7">ภายใน 7 วัน</option><option value="30">ภายใน 30 วัน</option>
+      </select>
+      <select id="fGeo" aria-label="ความแม่นของพิกัด">
+        <option value="">พิกัดทุกแบบ</option><option value="parcel">เฉพาะตำแหน่งแปลง</option>
+      </select>
+    </form>
+
+    <div class="map-box">
+      <div id="map" role="application" aria-label="แผนที่ทรัพย์"></div>
+      <div class="map-legend" id="legend">
+        <b>นัดขาย</b>
+        <span><i style="background:#d93025"></i>ภายใน 7 วัน</span>
+        <span><i style="background:#f29900"></i>ภายใน 30 วัน</span>
+        <span><i style="background:#1a73e8"></i>มากกว่า 30 วัน</span>
+        <span><i style="background:#9aa0a6"></i>ผ่านนัด / ไม่มีวันนัด</span>
+        <span><i class="ring"></i>ประมาณระดับตำบล</span>
+      </div>
+      <div class="map-count" id="mapCount"></div>
+      <button type="button" class="map-locate" id="locateBtn" aria-label="ตำแหน่งของฉัน" title="ตำแหน่งของฉัน">◎</button>
+    </div>
+    <p class="hint map-foot">หมุดทึบ = ตำแหน่งแปลงจากกรมที่ดิน · วงกลมประ = ประมาณระดับตำบล คลาดได้หลาย กม. · ตรวจประกาศกับกรมบังคับคดีก่อนตัดสินใจทุกครั้ง</p>
+  </main>
+
+  <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-head"><h3 id="modalTitle"></h3><button type="button" class="x" data-close aria-label="ปิด">✕</button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="js/map.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+﻿# whitelist: publish only the static site (raw CSV may hold personal data)
+/*
+!/site/
+!/.github/
+!/.gitignore

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ค้นหาทรัพย์บังคับคดี | LED Asset Finder</title>
+  <meta name="description" content="ค้นหาทรัพย์ประกาศขายทอดตลาดแยกตามจังหวัดและประเภท">
+  <link rel="stylesheet" href="css/styles.css?v=8">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="#top">
+        <span class="brand-mark">L</span>
+        <span>LED Asset Finder<small>ทรัพย์บังคับคดี</small></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav">เมนู</button>
+      <nav id="mainNav" class="main-nav" aria-label="เมนูหลัก">
+        <a href="#top" class="active" data-action="all"><i>▦</i>ทรัพย์</a>
+        <a href="map.html"><i>◫</i>แผนที่</a>
+        <a href="#results" data-action="condo"><i>▤</i>โครงการ</a>
+        <a href="#follow" data-action="follow"><i>♡</i>ติดตาม <em class="badge-n" data-follow-count></em></a>
+        <a href="#guide" data-action="guide"><i>▯</i>คู่มือประมูล</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn-ghost" id="loginBtn" href="#" data-action="login">เข้าสู่ระบบ</a>
+        <a class="btn-signup" id="signupBtn" href="#" data-action="signup">สมัครฟรี →</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="subbar">
+    <div class="wrap">
+      <span class="sub-left">ทรัพย์บังคับคดี <strong id="subCount">0</strong> จังหวัด<em id="subUpdated">อัปเดตทุกวัน</em><em>support@example.com</em></span>
+      <span class="sub-right">ติดตามเรา: <a class="chip" href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a><a class="chip" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a></span>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero" id="search">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">รู้ก่อนเคาะ ว่าคุ้มไหม</p>
+          <h1>ค้นทรัพย์บังคับคดี<br>ทั่วประเทศ <span class="count" id="heroCount">0</span> รายการ</h1>
+          <p class="lead">ราคาประเมิน วันนัดขาย และข้อมูลทรัพย์จากประกาศของกรมบังคับคดี ค้นหาตามจังหวัด ประเภท และงบประมาณได้ในที่เดียว</p>
+          <div class="hero-actions">
+            <a class="btn-cta" href="#results" data-action="search">เริ่มค้นหาฟรี <b>⚡</b></a>
+            <a class="btn-line" href="#" data-action="video"><span>▶</span>วิดีโอ - ใช้งานยังไง</a>
+          </div>
+          <ul class="checks">
+            <li>ดูข้อมูลทรัพย์ได้ไม่จำกัด</li>
+            <li>กรองตามจังหวัดและงบ</li>
+            <li>ตรวจสอบกับแหล่งทางการ</li>
+          </ul>
+        </div>
+        <div class="preview" aria-hidden="true">
+          <div class="badge-count"><div><span>ผลค้นหา</span><b id="badgeCount">0</b><span>รายการ</span></div></div>
+          <div class="preview-map">
+            <svg viewBox="0 0 400 260" preserveAspectRatio="none" class="roads">
+              <path d="M0 150 C80 120 140 190 220 150 S340 110 400 140" />
+              <path d="M110 0 C120 80 90 160 130 260" class="thin" />
+            </svg>
+            <span class="pin g" style="left:24%;top:24%"></span>
+            <span class="pin y" style="left:58%;top:42%"></span>
+            <span class="pin b" style="left:84%;top:58%"></span>
+          </div>
+          <div class="preview-card">
+            <div class="pc-top"><small id="previewType">ทรัพย์</small><span class="pill">ตัวอย่าง</span></div>
+            <b id="previewTitle">ตัวอย่างรายการ</b>
+            <p id="previewMeta">เลือกจังหวัดเพื่อดูรายการ</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <form class="search-panel" id="searchForm" role="search">
+        <div class="tabs" role="tablist" aria-label="ประเภททรัพย์" id="typeTabs">
+          <button type="button" class="tab" role="tab" data-type="" aria-selected="true">☰ ทุกประเภท</button>
+          <button type="button" class="tab" role="tab" data-type="land" aria-selected="false">⛰ ที่ดินว่างเปล่า</button>
+          <button type="button" class="tab" role="tab" data-type="house" aria-selected="false">⌂ ที่ดินพร้อมสิ่งปลูกสร้าง</button>
+          <button type="button" class="tab" role="tab" data-type="condo" aria-selected="false">▤ คอนโด</button>
+        </div>
+        <div class="search-form">
+          <label class="field"><span>จังหวัด</span>
+            <select id="provinceSelect" name="province"></select>
+          </label>
+          <label class="field"><span>งบประมาณ</span>
+            <select id="budgetSelect" name="budget">
+              <option value="">ทุกงบ</option>
+              <option value="300000">≤ 3 แสน</option>
+              <option value="500000">≤ 5 แสน</option>
+              <option value="1000000">≤ 1 ล้าน</option>
+              <option value="3000000">≤ 3 ล้าน</option>
+              <option value="10000000">≤ 10 ล้าน</option>
+            </select>
+          </label>
+          <label class="field"><span>วันนัดขาย</span>
+            <select id="dateSelect" name="date">
+              <option value="">ทุกวัน</option>
+              <option value="7">ภายใน 7 วัน</option>
+              <option value="30">ภายใน 30 วัน</option>
+              <option value="90">ภายใน 3 เดือน</option>
+            </select>
+          </label>
+          <label class="field"><span>ตัวกรองเพิ่มเติม</span>
+            <select id="signalSelect" name="signal">
+              <option value="">ทั้งหมด</option>
+              <option value="discount">ต่ำกว่าราคาประเมิน</option>
+              <option value="nomort">ไม่ติดจำนอง</option>
+              <option value="parcel">มีพิกัดแปลง</option>
+              <option value="new">ใหม่รอบนี้</option>
+            </select>
+          </label>
+          <button type="submit" class="btn-primary">ค้นหาทรัพย์ ⌕</button>
+        </div>
+        <p class="notice" id="dataNotice"></p>
+      </form>
+
+      <div class="features">
+        <div class="feature"><span class="ico">⌖</span><div><b>ทรัพย์ทั่วประเทศบนแผนที่</b><p>รวบรวมรายการจากหลายจังหวัด อัปเดตสม่ำเสมอ</p></div></div>
+        <div class="feature"><span class="ico">↗</span><div><b>เทียบราคาก่อนเคาะ</b><p>ดูราคาประเมินและราคาเริ่มต้นเทียบกัน</p></div></div>
+        <div class="feature"><span class="ico">!</span><div><b>เช็กความเสี่ยงก่อนเคาะ</b><p>อ่านรายละเอียดก่อนตัดสินใจประมูล</p></div></div>
+        <div class="feature"><span class="ico">◷</span><div><b>เตือนก่อนวันนัด</b><p>ติดตามวันนัดขายของทรัพย์ที่สนใจ</p></div></div>
+      </div>
+
+      <section class="section" id="results" aria-live="polite">
+        <div class="section-head">
+          <div>
+            <h2 id="resultTitle">รายการทรัพย์ทั้งหมด</h2>
+            <p>เรียงจากนัดขายที่ใกล้ที่สุด · <a class="link" href="#" data-action="provinces">เปลี่ยนจังหวัด</a> · <span id="resultCount"></span></p>
+          </div>
+          <a class="more-link" href="#" data-action="all">ดูทั้งหมด →</a>
+        </div>
+        <div class="cards" id="cards"></div>
+        <p class="empty" id="empty" hidden>ไม่พบรายการตามเงื่อนไข</p>
+        <div class="section-foot"><button type="button" class="btn-outline" id="moreBtn" hidden></button> <a class="btn-outline" href="#" data-action="all">ดูทรัพย์ทั้งหมด <span id="allCount">0</span> รายการ →</a></div>
+      </section>
+
+      <section class="section" id="provinces">
+        <div class="section-head">
+          <div><h2>เลือกดูตามจังหวัดยอดนิยม</h2></div>
+          <a class="more-link" href="#" data-action="provinces">ทุกจังหวัด →</a>
+        </div>
+        <div class="provinces" id="provinceGrid"></div>
+      </section>
+
+      <section class="section" id="guide">
+        <div class="duo">
+          <div class="promo">
+            <div>
+              <p class="kicker">ของแถมสำหรับสมาชิกใหม่</p>
+              <h3>รับคู่มือ “อ่านก่อนประมูล” ฟรี</h3>
+              <p>รวมจุดที่มือใหม่มักพลาดเมื่อซื้อทรัพย์บังคับคดี ดาวน์โหลดเป็น PDF ได้ทันที</p>
+              <a class="btn-white" href="#" data-action="guide">ดูสารบัญและรับคู่มือ ↓</a>
+            </div>
+            <div class="book" aria-hidden="true"><div class="book-cover">อ่านก่อน<br>ประมูล</div></div>
+          </div>
+          <div class="why">
+            <h3>ทำไมต้อง LED Asset Finder?</h3>
+            <div class="why-grid">
+              <div><i>↗</i><b>เทียบราคาประเมิน</b><p>เห็นราคาประเมินและราคาเริ่มต้นของแต่ละรายการ</p></div>
+              <div><i>!</i><b>ข้อควรระวังของทรัพย์</b><p>รวบรวมสิ่งที่ควรตรวจก่อนยื่นประมูล</p></div>
+              <div><i>▤</i><b>ทรัพย์ใกล้เคียง</b><p>ดูทรัพย์แบบเดียวกันในพื้นที่เดียวกัน</p></div>
+              <div><i>▯</i><b>เอกสารที่ต้องใช้</b><p>รวมรายการเอกสารที่ต้องเตรียม</p></div>
+              <div><i>≡</i><b>บอร์ดติดตามทรัพย์</b><p>เรียงตามความเร่งด่วนของวันนัดขาย</p></div>
+              <div><i>♢</i><b>เตือนก่อนวันนัด</b><p>แจ้งเตือนเมื่อใกล้วันนัดขาย</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="band" id="how">
+      <div class="wrap">
+        <h2 class="center">ใช้งานง่ายใน 3 ขั้นตอน</h2>
+        <div class="steps">
+          <div class="step"><span class="num">1</span><h3>ค้นหาหรือเปิดแผนที่</h3><p>กรองตามจังหวัด งบ ประเภททรัพย์ หรือดูทำเลที่คุณรู้จักดี</p></div>
+          <div class="step"><span class="num">2</span><h3>อ่านข้อมูลก่อนเคาะ</h3><p>ดูราคาประเมิน วันนัดขาย และรายละเอียดของทรัพย์แต่ละรายการ</p></div>
+          <div class="step"><span class="num">3</span><h3>ติดตามและไปเคาะ</h3><p>จดเพดานราคาของคุณเอง เตรียมเอกสาร แล้วไปประมูลอย่างมั่นใจ</p></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section" id="reviews">
+        <h2 class="center">สมาชิกพูดถึงเราอย่างไร</h2>
+        <p class="center muted-note">ตัวอย่างข้อความสำหรับจัดหน้า ยังไม่ใช่ความเห็นจริงของผู้ใช้</p>
+        <div class="reviews">
+          <figure class="review"><div class="who"><span class="avatar">ก</span><div><b>ผู้ใช้ตัวอย่าง 1</b><small>กรุงเทพฯ · นักลงทุนอสังหาฯ</small></div></div><blockquote>“ข้อความตัวอย่างสำหรับจัดวางหน้า”</blockquote></figure>
+          <figure class="review"><div class="who"><span class="avatar">ข</span><div><b>ผู้ใช้ตัวอย่าง 2</b><small>เชียงใหม่ · นักลงทุนอสังหาฯ</small></div></div><blockquote>“ข้อความตัวอย่างสำหรับจัดวางหน้า”</blockquote></figure>
+          <figure class="review"><div class="who"><span class="avatar">ค</span><div><b>ผู้ใช้ตัวอย่าง 3</b><small>พิษณุโลก · นายหน้าขายที่ดิน</small></div></div><blockquote>“ข้อความตัวอย่างสำหรับจัดวางหน้า”</blockquote></figure>
+        </div>
+      </section>
+
+      <section class="member" id="member">
+        <div>
+          <span class="tag">สำหรับสมาชิก</span>
+          <h2>ปลดล็อกข้อมูลทุกทรัพย์</h2>
+          <p>รู้ก่อนเคาะว่าคุ้มไหม</p>
+          <ul>
+            <li>เพดานราคาที่ควรเคาะ</li><li>ค่าซ่อมประเมินจากภาพ</li>
+            <li>ธงความเสี่ยงของทรัพย์</li><li>คู่มือประมูล — โหลดฟรี</li>
+          </ul>
+        </div>
+        <div class="member-cta">
+          <a class="btn-cta full" href="#" data-action="signup">สมัครฟรี</a>
+          <small>ไม่มีค่าใช้จ่าย · เริ่มใน 10 วินาที</small>
+        </div>
+      </section>
+      <p class="center login-hint">มีบัญชีอยู่แล้ว? <a class="link" href="#" data-action="login">เข้าสู่ระบบ</a></p>
+    </div>
+
+    <div class="wrap">
+      <section class="section" id="faq">
+        <h2 class="center">คำถามที่พบบ่อย</h2>
+        <div class="faq">
+          <details><summary>ข้อมูลในเว็บนี้มาจากไหน</summary><p>ต้นทางคือประกาศขายทอดตลาดของกรมบังคับคดี เก็บเป็นรอบและประมวลผลทุกสัปดาห์ เว็บแสดงข้อมูลตามวันที่ในแถบด้านบน ไม่ใช่ข้อมูลสด และไม่แสดงชื่อคู่ความหรือผู้ถือกรรมสิทธิ์ ตำแหน่งบนแผนที่มาจากกรมที่ดิน (หมุดแปลง) หรือประมาณระดับตำบล (วงกลมประ)</p></details>
+          <details><summary>ทำไมทรัพย์ "จำนองติดไป" ไม่มีป้ายต่ำกว่าประเมิน</summary><p>ทรัพย์แบบนี้ตั้งราคาเคาะต่ำ แต่ผู้ซื้อต้องรับภาระจำนองเพิ่ม เงินที่จ่ายจริงจึงอาจสูงกว่าราคาประเมินมาก เว็บยังไม่มียอดหนี้จึงไม่คำนวณส่วนลดให้</p></details>
+          <details><summary>ราคาที่แสดงคือราคาอะไร</summary><p>การ์ดแสดงราคาเริ่มต้นเมื่อมี ถ้าไม่มีจะแสดงราคาประเมิน ป้าย "ต่ำกว่าประเมิน" แสดงเมื่อราคาเริ่มต้นต่ำกว่าราคาประเมิน</p></details>
+          <details><summary>"ใหม่รอบนี้" และ "ราคาเปลี่ยน" คืออะไร</summary><p>ระบบเทียบข้อมูลรอบล่าสุดกับรอบก่อนหน้า รายการที่ไม่เคยอยู่ในรอบก่อนจะติดป้าย "ใหม่" รายการที่ราคาเริ่มต้นหรือวันนัดเปลี่ยนจะแจ้งไว้ในรายละเอียด ไม่ใช่คำแนะนำซื้อหรือขาย</p></details>
+          <details><summary>ข้อมูลรายการติดตามเก็บไว้ที่ไหน</summary><p>เก็บในเบราว์เซอร์ของคุณเท่านั้น หากล้างข้อมูลเบราว์เซอร์ รายการจะหายไป</p></details>
+          <details><summary>ใช้ตัดสินใจประมูลได้เลยไหม</summary><p>ไม่ควร ให้ตรวจประกาศและเงื่อนไขกับกรมบังคับคดีทุกครั้งก่อนเข้าประมูล</p></details>
+        </div>
+      </section>
+    </div>
+
+    <section class="alert-band" id="follow">
+      <div class="wrap alert-in">
+        <span class="bell">♪</span>
+        <div><h3>รับทรัพย์ใหม่ที่ตรงใจก่อนใคร</h3><p>บันทึกการค้นหา (จังหวัด งบ ประเภท) แล้วรับแจ้งเตือนก่อนวันนัดขาย</p></div>
+        <a class="btn-cta" href="#" data-action="alert">ตั้งแจ้งเตือนทรัพย์ใหม่ ⚡</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a class="brand light" href="#top"><span class="brand-mark">L</span><span>LED Asset Finder</span></a>
+          <p>ชั้นข้อมูลสำหรับนักลงทุนทรัพย์บังคับคดี ให้คุณค้นหาได้ทั่วประเทศโดยไม่ต้องเดินทาง</p>
+          <div class="foot-social"><a class="chip dark" href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a><a class="chip dark" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a></div>
+        </div>
+        <div>
+          <h4>เมนู</h4>
+          <ul><li><a href="#" data-action="all">ทรัพย์ทั้งหมด</a></li><li><a href="map.html">แผนที่</a></li><li><a href="#" data-action="condo">โครงการ</a></li><li><a href="#" data-action="follow">ติดตาม</a></li><li><a href="#" data-action="login">บัญชีของฉัน</a></li></ul>
+        </div>
+        <div>
+          <h4>จังหวัดยอดนิยม</h4>
+          <ul id="footProvinces"></ul>
+        </div>
+        <div>
+          <h4>คู่มือ &amp; บริการ</h4>
+          <ul><li><a href="#" data-action="guide">คู่มืออ่านก่อนประมูล</a></li><li><a href="#faq">คำถามที่พบบ่อย</a></li><li><a href="#" data-info="about">แหล่งที่มาของข้อมูล</a></li></ul>
+        </div>
+        <div>
+          <h4>ช่วยเหลือ</h4>
+          <ul><li><a href="#" data-info="privacy">นโยบายความเป็นส่วนตัว</a></li><li><a href="#" data-info="terms">ข้อกำหนดการใช้งาน</a></li><li><a href="#" data-info="contact">ติดต่อเรา</a></li></ul>
+        </div>
+      </div>
+      <div class="foot-bottom" id="about">© LED Asset Finder · ข้อมูลประกาศขายทอดตลาดจากกรมบังคับคดี <span id="footNote"></span></div>
+    </div>
+  </footer>
+
+  <div class="cookie" id="cookie">
+    <p>ใช้คุกกี้เท่าที่จำเป็น (จำตัวกรอง) ไม่มีคุกกี้โฆษณา</p>
+    <button type="button" id="cookieOk">รับทราบ</button>
+  </div>
+
+  <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-head"><h3 id="modalTitle"></h3><button type="button" class="x" data-close aria-label="ปิด">✕</button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js?v=8"></script>
+</body>
+</html>
